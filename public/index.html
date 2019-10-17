@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>云计算作业</title>
+    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+
+</head>
+<body>
+<form class="form-horizontal" enctype='multipart/form-data' method='post' action='javascript:;'>
+    <input type="file" id="choose"/>
+    <input type="text" id="desc">
+    <button onclick="handle()">上传</button>
+    <img class="newImg" style="height: 80px;width: 100px"/>
+    <table class="tab">
+
+    </table>
+</form>
+
+<script>
+
+    window.onload=function requestData(){
+        $.ajax({
+            url: "/getpic",
+            type: "post",
+            dataType: "json",
+            async:false,
+            success: function(data){
+                /*这个方法里是ajax发送请求成功之后执行的代码*/
+                showData(data);//我们仅做数据展示
+            },
+            error: function(msg){
+                alert("ajax连接异常："+msg);
+            }
+        });
+    }
+    //展示数据
+    function showData(data) {
+
+        var str = "";//定义用于拼接的字符串
+        for (var i = 0; i < data.length; i++) {
+            //拼接表格的行和列
+            str = "<tr><td><img name='pic"+i+"'  src='" + data[i].pic + "' alt='' style='width: 100px;height: 80px'></td><td>" + data[i].desc + "</td><td><a href='" + data[i].pic + "' download='pic"+i+".jpg'>下载图片</a></td>/tr>";
+            //追加到table中
+            $(".tab").append(str);         }
+    }
+    function handle() {
+        let file = document.getElementById("choose").files[0];
+        let formData = new FormData();
+        formData.append("avatar", file);
+        formData.append("desc",document.getElementById("desc").value)
+
+        $.ajax({
+            type: 'POST',
+            url: '/profile',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $(".newImg").attr("src", data.filePath);
+            },
+            error: function (err) {
+                console.log(err.message);
+            }
+        })
+    }
+</script>
+</body>
+</html>
