@@ -18,6 +18,6 @@
     "aws-sdk": "^2.548.0",
     "dynamo": "^0.2.14",
     "dynamodb": "^1.2.0",
-    "papaparse": "^5.1.0"
+    "papaparse": "^5.2.0"
   }
 }
